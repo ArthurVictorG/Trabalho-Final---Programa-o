@@ -1,0 +1,102 @@
+import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            File arquivo = new File("Armazenamento.txt");
+            if (!arquivo.exists()) {
+                arquivo.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(arquivo, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            System.out.println("Digite o nome do doador:");
+            String nomedoador = sc.nextLine();
+
+            int maxDoacoes = 5;
+            double[] doacoes = new double[maxDoacoes];
+            int count = 0;
+
+            while (true) {
+                System.out.println("\nSistema de Gerenciamento de Doações");
+                System.out.println("\nVocê deseja doar?");
+                System.out.println("Digite 1 para sim e 2 para não");
+                int opcao = sc.nextInt();
+                sc.nextLine();
+
+                if (opcao != 1 && opcao != 2) {
+                    System.out.println("\nOpção inválida. Digite 1 para sim ou 2 para não.");
+                    continue;
+                }
+
+                if (opcao == 2) {
+                    break;
+                }
+
+                System.out.println("\nDigite o valor da doação em R$:");
+                double valorDoacao = sc.nextDouble();
+                sc.nextLine();
+
+                if (count < maxDoacoes) {
+                    doacoes[count] = valorDoacao;
+                    count++;
+                } else {
+                    System.out.println("\nNúmero máximo de doações alcançado.");
+                    break;
+                }
+            }
+
+            double totalDoacoes = 0;
+            for (int i = 0; i < count; i++) {
+                totalDoacoes += doacoes[i];
+            }
+            bw.write("Nome do Doador: " + nomedoador);
+            bw.newLine();
+            for (int i = 0; i < count; i++) {
+                bw.write("Doação " + (i + 1) + ": R$ " + doacoes[i]);
+                bw.newLine();
+            }
+            bw.write("Total arrecadado: R$ " + totalDoacoes);
+            bw.newLine();
+            bw.write("--------------------------");
+            bw.newLine();
+            bw.close();
+
+            System.out.println("\nResumo das Doações:");
+            for (int i = 0; i < count; i++) {
+                System.out.println("Doação " + (i + 1) + ": " + doacoes[i]);
+            }
+            System.out.println("Total arrecadado: R$ " + totalDoacoes);
+
+        } catch (IOException ex) {
+            System.out.println("Erro ao acessar arquivo!");
+            salvarErroEmArquivo(ex);
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+            salvarErroEmArquivo(e);
+        } finally {
+            sc.close();
+        }
+    }
+
+    private static void salvarErroEmArquivo(Exception ex) {
+        try (FileWriter fw = new FileWriter("Erro.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter pw = new PrintWriter(bw)) {
+            ex.printStackTrace(pw);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar a mensagem de erro no arquivo: " + e.getMessage());
+        }
+    }
+}

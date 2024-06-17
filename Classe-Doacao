@@ -1,0 +1,24 @@
+public class Doacao{
+  public double dinheiro;
+  public String nomedoador;
+  public double doacao;
+
+  public Doacao (double dinheiro, String nomedoador){
+    this.dinheiro = dinheiro;
+    this.nomedoador = nomedoador;
+  }
+
+  public double getDinheiro(){
+    return this.dinheiro;
+  }
+  public String getNomedoador(){
+    return this.nomedoador;
+  }
+
+  public void setDinheiro(double dinheiro){
+    this.dinheiro = dinheiro;
+  }
+  public void setNomedoador(String nomedoador){
+    this.nomedoador = nomedoador;
+  }
+}
